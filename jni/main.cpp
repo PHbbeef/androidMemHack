@@ -21,7 +21,7 @@ int main (int argc, char *argv[]) {
     goto RET;
   }
   errno = 0;
-  pid = atoi(argv[1]);
+  pid = atoi(argv[1]);  //进程
   if (pid == 0) {
     printf("error argument #1. Must be non-0 integer");
     ret = 2;
@@ -35,13 +35,14 @@ int main (int argc, char *argv[]) {
     goto RET;
   }
 
-  if (ptrace(PTRACE_ATTACH, pid, NULL, NULL) == -1) {
+  //读取安卓内存
+  if (ptrace(PTRACE_ATTACH, pid, NULL, NULL) == -1) {   //附加
     perror("attach");
     ret = 4;
     goto RET;
   }
 
-  if (waitpid(pid, &waitPidStatus, 0) == -1 || !WIFSTOPPED(waitPidStatus)) {
+  if (waitpid(pid, &waitPidStatus, 0) == -1 || !WIFSTOPPED(waitPidStatus)) {    //暂停进程
     perror("waitPid");
     ret = 5;
     goto DETACH_AND_RET;
